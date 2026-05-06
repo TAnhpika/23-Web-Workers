@@ -1,13 +1,24 @@
 /**
- * Web Workers API
- * - là 1 API giúp tạo 1 luồng xử lý mới bên cạnh luồng chính
- * -> xử lý các cv đồng bộ mất tg dễ làm block luồng chính 
- * 
- * 3 loại:
- * - Dedicated workers: tạo 1 luồng xử lý độc lập (1 tab 1 worker)
- * - Shared workers: ... nhiều tab 1 worker
- * - Service workers: giúp xây các cơ chế đa dạng 
- * + offline web
- * + caching - cache đc các kết quả qua fetch, xhr, tương tác vs network api (fetch, xhr)
- * + thông báo khi k vào trang web (chỉ mở trình duyệt -> tự bắn thông báo tới)
+ * Web worker:
+ * - cung cấp bởi JS runtime - trình duyệt
+ * - giúp tạo 1 luồng xử lý JS khác - mỗi luồng có 1 callstack độc lập
+ * -> xử lý các cv đồng bộ mất tg (r gửi về luồng chính)
+ *
+ * Lưu ý worker:
+ * - Điều kiện: Same origin: http://127.0.0.1:5500
+ * - K dùng đc DOM
+ * - K dùng đc document, window, history ...
  */
+
+// Web worker
+const worker1 = new Worker("./worker1.js");
+
+worker1.onmessage = (e) => {
+    console.log(e.data);
+};
+
+const button = document.querySelector("#button");
+
+button.addEventListener("click", () => {
+    worker1.postMessage(3e8);
+});
